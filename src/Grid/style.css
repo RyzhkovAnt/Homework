@@ -1,0 +1,45 @@
+table {
+   border-collapse: collapse;
+   border: 1px solid grey;
+   cursor: default;
+   width:100%;
+   padding:15px;
+
+
+}
+th, td {
+   width:20%;
+   border: 1px solid grey; 
+   padding: 4px 10px;
+}
+
+tr:hover td {
+   background: #c8494962;
+   color: black;
+}
+
+th {
+   position: relative;
+   cursor: pointer;
+}
+
+th:after {
+   position: absolute;
+   
+   top: 5px;
+   right: 5px;
+
+}
+.select{
+   background-color: #6e8dfd;
+   color:#fff;
+}
+.unsort:after{
+   content: url("../assets/minus.svg");
+}
+.sort::after {
+   content: url("../assets/up-arrow.svg");
+}
+.descending::after{
+   content: url("../assets/down-arrow.svg")
+}

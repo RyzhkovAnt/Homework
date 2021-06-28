@@ -1,0 +1,46 @@
+  .dataTable {
+     margin-top: 10px;
+     width:100%;
+     position: relative;
+  }
+  .filter,.addUser{
+     padding-left:25px;
+  }
+  .dataGrid {
+     margin:10px 30px;
+     max-height: 650px;
+     overflow-y: auto;
+     overflow-x: hidden;
+  }
+
+  .pagination ul {
+     display: inline-block;
+     padding-left: 15px;
+     padding-right: 15px;
+  }
+
+  .pagination li {
+     display: inline-block;
+     height: 25px;
+     padding: 0 5px;
+     
+     border:1px solid #6f6dec
+  }
+  
+  .pagination li:not(.disabled):hover{
+     cursor: pointer;
+     background-color: #aeacf6;
+     color:#fff
+  }
+  .pagination .active{
+     background-color:#6f6dec ;
+     color:#fff;
+  }
+  .disabled{
+     cursor:default;
+     background-color:#d4d1d15e ;
+  }
+  .disabled:hover{
+   cursor:default;
+   background-color:#d4d1d15e ;
+  }
