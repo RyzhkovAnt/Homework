@@ -1,70 +1,63 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Table } from '../Table/Table';
+import Table from '../Table/Table';
 import { Preloader } from "../PreLoader/Preloader"
-import { DragDropContext } from 'react-beautiful-dnd'; 
+import { DragDropContext } from 'react-beautiful-dnd';
 import './style.css';
+import { connect } from 'react-redux';
+import { getDataForTable, loading } from '../reducer';
 
-export const App = (props) => {
+const App = ({ loading, isLoading, data, getData }) => {
 
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const BIG_FROM_SERVER = "http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}";
+  const SMALL_FROM_SERVER = "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}";
+  const BIG_FROM_FILE = "/data_big.json";
+  const SMALL_FROM_FILE = "/data_small.json";
 
-  const onSuccsess = (response) => {
-    setLoading(false)
-    setData(response.data.data)
+  const clickHandler = (source) => {
+    isLoading(true)
+    getData(source)
   }
-
-  const onSuccsessFromServer = (response) => {
-    setLoading(false)
-    setData(response.data)
-  }
-
-  const onError = (error) => {
-    setLoading(false)
-    console.log(error)
-  }
-
-
   return (
     <div className="App">
       {
         data.length === 0 && <div className="menu">Загрузить:
 
           <button onClick={() => {
-            setLoading(true)
-            axios.get("http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}")
-              .then(onSuccsessFromServer)
-              .catch(onError)
+            clickHandler(SMALL_FROM_SERVER)
           }}>Малый пак с сервера</button>
 
           <button onClick={() => {
-            setLoading(true)
-            axios.get("http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}")
-              .then(onSuccsessFromServer)
-              .catch(onError)
+            clickHandler(BIG_FROM_SERVER)
           }}>Большой пак c сервера</button>
 
           <button onClick={() => {
-            setLoading(true)
-            axios.get("/data_small.json")
-              .then(onSuccsess)
-              .catch(onError)
+            clickHandler(SMALL_FROM_FILE)
           }}>Малый пак из файла</button>
 
           <button onClick={() => {
-            setLoading(true)
-            axios.get("/data_big.json")
-              .then(onSuccsess)
-              .catch(onError)
+            clickHandler(BIG_FROM_FILE)
           }}>Большой пак из файла</button>
         </div>
       }
 
-      { loading && <Preloader />}
+      {loading && <Preloader />}
 
-      { !loading && data.length > 0 && <Table items={data} /> }
+      {!loading && data.length > 0 && <Table items={data} />}
     </div>
   );
 }
-export default App
+
+const mapStateToProps = (state) => {
+  return {
+    loading: state.ducks.loading,
+    data: state.ducks.data,
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    isLoading: (isLoading) => dispatch(loading(isLoading)),
+    getData: (source) => dispatch(getDataForTable(source)),
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App)

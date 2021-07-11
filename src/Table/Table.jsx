@@ -7,10 +7,21 @@ import { sortElement, getSomeItems, FilterElements } from "../utils/Utils"
 import ReactPaginate from 'react-paginate';
 import { Preloader } from '../PreLoader/Preloader'
 import "./style.css"
+import { connect } from 'react-redux';
+import { addUser, deleteElement, getDataForRender, search, selectElement, sorting } from '../reducer';
 
 
-export const Table = (props) => {
-    const { items } = props;
+const Table = (props) => {
+    const { items,
+        renderElement,
+        changeRenderedData,
+        sortSetting,
+        filterElement,
+        sortElement,page,
+        selectedElement,
+        changeSelectedElement,
+        deleteElement,
+        addUser } = props;
 
     const columnName = ["id", "firstName", "lastName", "email", "phone"]
     const [allElements, setAllElements] = useState(items)
@@ -18,51 +29,32 @@ export const Table = (props) => {
     const [sortedItems, setSortedItems] = useState(items)
     const [renderItem, setRenderItem] = useState(getSomeItems(sortedItems));
     const [selectedItem, setSelectedItem] = useState(null)
-    const [page, setPage] = useState(0);
+    // const [page, setPage] = useState(0);
     const [showAddUserForm, setShowAddUserForm] = useState(false);
     const [searchString, setSearchString] = useState("");
 
     const SortElements = (field) => {
-        const descendingOrder = sortDirection.field === field ? !sortDirection.descendingOrder : false;
-        setSortDirection({ field, descendingOrder });
-        const sorted = sortElement(sortedItems, field, descendingOrder);
-        setSortedItems(sorted);
-        setRenderItem(getSomeItems(sorted));
-        setPage(0)
-        setSelectedItem(null)
+        const descendingOrder = sortSetting && sortSetting.field === field ? !sortSetting.descendingOrder : false;
+        sortElement(field,descendingOrder)
     }
 
     const onPageClick = (e) => {
-        setPage(e.selected)
-        setRenderItem(getSomeItems(sortedItems, e.selected * 50))
+        changeRenderedData(e.selected)
     }
 
     const onSearchHandler = () => {
-        const searchedItem = FilterElements(allElements, searchString);
-        setSortedItems(searchedItem)
-        setRenderItem(getSomeItems(searchedItem))
-        setSortDirection({ field: "none", descendingOrder: false })
+        filterElement(searchString)
     }
 
     const onAddUserHandeler = (user) => {
-        setAllElements([user, ...allElements])
-        setSortedItems([user, ...items])
-        setRenderItem(getSomeItems([user, ...items]))
-        setSortDirection({ field: "none", descendingOrder: false })
+        addUser(user)
         setSearchString("")
         setShowAddUserForm(false)
     }
 
-    const deleteHandler = () => {
-        let newItemArray = sortedItems.filter(el => el !== selectedItem)
-        setAllElements(allElements.filter(el => el !== selectedItem))
-        setSortedItems(newItemArray)
-        setRenderItem(getSomeItems(newItemArray, page * 50))
-        setSelectedItem(null)
-    }
 
     const closeHandler = () => {
-        setSelectedItem(null)
+        changeSelectedElement(null)
     }
 
     return <div className="dataTable">
@@ -74,21 +66,21 @@ export const Table = (props) => {
             <input value={searchString} onChange={(e) => { setSearchString(e.target.value) }} />
             <button onClick={onSearchHandler}>Найти</button>
         </div>
-         <div className="dataGrid">
+        <div className="dataGrid">
             <Grid
                 columnName={columnName}
-                selectedItem={selectedItem}
-                sortDirection={sortDirection}
+                selectedItem={selectedElement}
+                sortDirection={sortSetting}
                 SortCallback={SortElements}
-                RowItemCallback={setSelectedItem}>
-                {renderItem && renderItem.map((item, index) => {
+                RowItemCallback={changeSelectedElement}>
+                {renderElement && renderElement.map((item, index) => {
                     return (
                         <Row key={index} item={item} />
                     )
                 })}
             </Grid>
         </div>
-        
+
         {Math.ceil(sortedItems.length / 50) > 1 &&
             <ReactPaginate
                 pageCount={Math.ceil(sortedItems.length / 50)}
@@ -105,9 +97,9 @@ export const Table = (props) => {
                 onPageChange={onPageClick}
                 breakClassName={'break-me'}
             />}
-        {selectedItem &&
+        {selectedElement &&
             <div className="additionalInfo">
-                <AdditionalInfo item={selectedItem} deleteHandler={deleteHandler} closeHandler={closeHandler} />
+                <AdditionalInfo item={selectedElement} deleteHandler={deleteElement} closeHandler={closeHandler} />
             </div>
         }
 
@@ -115,4 +107,23 @@ export const Table = (props) => {
     </div>
 }
 
-export default Table;
+const mapStateToProps = (state) => {
+    return {
+        renderElement: state.ducks.renderData,
+        sortSetting: state.ducks.sortSetting,
+        page:state.ducks.page,
+        selectedElement:state.ducks.selectedElement
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeRenderedData: (page) => dispatch(getDataForRender(page)),
+        sortElement: (field, descendingOrder) => dispatch(sorting(field, descendingOrder)),
+        filterElement:(str)=>dispatch(search(str)),
+        changeSelectedElement:(el)=>dispatch(selectElement(el)),
+        deleteElement:()=>dispatch(deleteElement()),
+        addUser:(el)=>dispatch(addUser(el)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);
