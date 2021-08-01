@@ -7,12 +7,20 @@ import Task1 from "../src/task1/task1"
 import { TestDnD } from "./task1/testDnD"
 import { Provider } from 'react-redux';
 import { store } from './store';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { AdditionalInfo } from './AdditionalInfo/AdditionalInfo';
 
 ReactDOM.render(
+  <BrowserRouter>
   <Provider store={store}>
-    <Task1 />
+    {/* <Switch>
+      <Route path="/app" component={App} exact/>
+      <Route path="/app/:id/:name" component={AdditionalInfo}/>
+    </Switch> */}
     <App/>
-  </Provider>,
+  </Provider>
+  </BrowserRouter>
+  ,
   document.getElementById('root')
 );
 

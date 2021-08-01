@@ -4,60 +4,24 @@ import Table from '../Table/Table';
 import { Preloader } from "../PreLoader/Preloader"
 import { DragDropContext } from 'react-beautiful-dnd';
 import './style.css';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { getDataForTable, loading } from '../reducer';
+import { AdditionalInfo } from '../AdditionalInfo/AdditionalInfo';
+import { Redirect, Route, Router, Switch } from 'react-router-dom';
+import { AddUser } from '../AddUser/AddUser';
+import Menu from '../Menu/Menu';
 
-const App = ({ loading, isLoading, data, getData }) => {
+const App = (props) => {
 
-  const BIG_FROM_SERVER = "http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}";
-  const SMALL_FROM_SERVER = "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}";
-  const BIG_FROM_FILE = "/data_big.json";
-  const SMALL_FROM_FILE = "/data_small.json";
-
-  const clickHandler = (source) => {
-    isLoading(true)
-    getData(source)
-  }
+  const data = useSelector(state => state.tableReducer.data)
+  const loading = useSelector(state => state.tableReducer.loading)
   return (
     <div className="App">
-      {
-        data.length === 0 && <div className="menu">Загрузить:
-
-          <button onClick={() => {
-            clickHandler(SMALL_FROM_SERVER)
-          }}>Малый пак с сервера</button>
-
-          <button onClick={() => {
-            clickHandler(BIG_FROM_SERVER)
-          }}>Большой пак c сервера</button>
-
-          <button onClick={() => {
-            clickHandler(SMALL_FROM_FILE)
-          }}>Малый пак из файла</button>
-
-          <button onClick={() => {
-            clickHandler(BIG_FROM_FILE)
-          }}>Большой пак из файла</button>
-        </div>
-      }
-
+      {data.length === 0 && <Menu />}
       {loading && <Preloader />}
-
-      {!loading && data.length > 0 && <Table items={data} />}
+      {data.length > 0 && <Table />}
     </div>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    loading: state.ducks.loading,
-    data: state.ducks.data,
-  }
-}
-const mapDispatchToProps = (dispatch) => {
-  return {
-    isLoading: (isLoading) => dispatch(loading(isLoading)),
-    getData: (source) => dispatch(getDataForTable(source)),
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default App

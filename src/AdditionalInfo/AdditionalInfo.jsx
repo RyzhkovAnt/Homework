@@ -1,6 +1,7 @@
 import React from 'react'
-import { useDispatch,useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { changeSelectedElement, deleteElement } from '../reducer/actions'
+import { Route, useParams } from 'react-router-dom'
 import "./style.css"
 
 /*
@@ -17,14 +18,14 @@ et lacus magna dolor...
 export const AdditionalInfo = (props) => {
     const { item, deleteHandler, closeHandler } = props
     const user = useSelector(state => state.tableReducer.selectedElement)
-    const dispatch = useDispatch
+    const dispatch = useDispatch()
 
     return <div className="additionalInfo">
         <div className="additionalInfo-head">
             <div><b>Дополнительная информация:</b></div>
             <div className="additionalInfo-buttons">
-                <button className="delete" onClick={deleteElement}>Удалить</button>
-                <button className="close" onClick={e=>dispatch(changeSelectedElement(null))}>Закрыть</button>
+                <button className="delete" onClick={() => dispatch(deleteElement())}>Удалить</button>
+                <button className="close" onClick={() => dispatch(changeSelectedElement(null))}>Закрыть</button>
             </div>
         </div>
         <div className="userInfo">

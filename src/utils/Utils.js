@@ -31,9 +31,10 @@ export const sortElement = (elements, field, descendingOrder) => {
  * @returns Отфильтрованный массив
  */
 export const FilterElements = (items, substring) => {
+    console.log(substring)
     return items.filter(item => {
         for (let prop in item) {
-            if (typeof item[prop]!=='object' && item[prop].toString().toLowerCase().includes(substring.toLowerCase())) {
+            if (typeof item[prop]!=='object' && item[prop].toString().toLowerCase().indexOf(substring.toLowerCase())!==-1) {
                 return true;
             }
         }

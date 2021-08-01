@@ -78,17 +78,30 @@ export function searchElements(searchString) {
     }
 }
 
+export function addUser(user) {
+    return (dispatch, getState) => {
+        const newData = [user, ...getState().tableReducer.data]
+        const renderElements = getSomeItems(newData)
+
+        dispatch(changePage(0))
+        dispatch({ type: DATA, payload: newData })
+        dispatch(changeData(newData))
+        dispatch(renderData(renderElements))
+        dispatch(changeSortingSetting({ field: "none", descendingOrder: false }))
+    }
+}
+
 export function deleteElement() {
     return (dispatch, getState) => {
         const el = getState().tableReducer.selectedElement;
         const newDefData = getState().tableReducer.data.filter(item => item !== el)
         const newSortData = getState().tableReducer.changedData.filter(item => item !== el)
-        const renderData = getSomeItems(newSortData, getState().tableReducer.page * 50)
+        const renderElements = getSomeItems(newSortData, getState().tableReducer.page * 50)
 
 
         dispatch({ type: DATA, payload: newDefData })
         dispatch(changeData(newSortData))
-        dispatch(renderData(renderData))
+        dispatch(renderData(renderElements))
         dispatch(changeSelectedElement(null))
     }
 }
@@ -105,6 +118,8 @@ export function getData(source) {
                 console.log(error)
             }).finally(() => {
                 dispatch({ type: DATA, payload: data })
+                dispatch(changeData(data))
+                dispatch(renderData(getSomeItems(data)))
                 dispatch(hideLoader())
             }
             )
