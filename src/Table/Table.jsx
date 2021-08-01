@@ -7,8 +7,9 @@ import { sortElement, getSomeItems, FilterElements } from "../utils/Utils"
 import ReactPaginate from 'react-paginate';
 import { Preloader } from '../PreLoader/Preloader'
 import "./style.css"
-import { connect } from 'react-redux';
+import { connect, useSelector,useDispatch } from 'react-redux';
 import { addUser, deleteElement, getDataForRender, search, selectElement, sorting } from '../reducer';
+import { changePage, searchElements } from '../reducer/actions';
 
 
 const Table = (props) => {
@@ -17,21 +18,23 @@ const Table = (props) => {
         changeRenderedData,
         sortSetting,
         filterElement,
-        sortElement,page,
-        selectedElement,
+        sortElement,
         changeSelectedElement,
         deleteElement,
         addUser } = props;
 
     const columnName = ["id", "firstName", "lastName", "email", "phone"]
-    const [allElements, setAllElements] = useState(items)
-    const [sortDirection, setSortDirection] = useState({ field: "none", descendingOrder: false })
     const [sortedItems, setSortedItems] = useState(items)
-    const [renderItem, setRenderItem] = useState(getSomeItems(sortedItems));
-    const [selectedItem, setSelectedItem] = useState(null)
     // const [page, setPage] = useState(0);
     const [showAddUserForm, setShowAddUserForm] = useState(false);
     const [searchString, setSearchString] = useState("");
+
+    const dispatch = useDispatch()
+
+    const  page=useSelector(state=>state.tableReducer.page)
+    const renderData=useSelector(state=>state.tableReducer.renderData)
+    const selectedElement=useSelector(state=>state.tableReducer.selectedElement)
+
 
     const SortElements = (field) => {
         const descendingOrder = sortSetting && sortSetting.field === field ? !sortSetting.descendingOrder : false;
@@ -39,11 +42,12 @@ const Table = (props) => {
     }
 
     const onPageClick = (e) => {
-        changeRenderedData(e.selected)
+        dispatch(changePage(e.selected))
     }
 
     const onSearchHandler = () => {
-        filterElement(searchString)
+        dispatch(searchElements(searchString))
+        // filterElement(searchString)
     }
 
     const onAddUserHandeler = (user) => {
@@ -73,7 +77,7 @@ const Table = (props) => {
                 sortDirection={sortSetting}
                 SortCallback={SortElements}
                 RowItemCallback={changeSelectedElement}>
-                {renderElement && renderElement.map((item, index) => {
+                {renderData && renderData.map((item, index) => {
                     return (
                         <Row key={index} item={item} />
                     )
@@ -99,7 +103,7 @@ const Table = (props) => {
             />}
         {selectedElement &&
             <div className="additionalInfo">
-                <AdditionalInfo item={selectedElement} deleteHandler={deleteElement} closeHandler={closeHandler} />
+                <AdditionalInfo />
             </div>
         }
 

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { FilterElements, getSomeItems, sortElement } from "../utils/Utils";
-const INCREMENT_TWO = "INCREMENT_TWO";
 const LOADING = "LOADING";
 const DATA = "DATA";
 const RENDER_DATA = "RENDER_DATA";

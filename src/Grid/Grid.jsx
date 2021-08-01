@@ -1,4 +1,6 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { changeSortingSetting, sortData } from '../reducer/actions'
 import "./style.css"
 /** Grid props
     @prop {string} items Список отображаемых элементов таблицы
@@ -8,27 +10,36 @@ import "./style.css"
  */
 export const Grid = (props) => {
     const { children, columnName, sortDirection,
-         SortCallback, RowItemCallback,selectedItem } = props
+        SortCallback, RowItemCallback, selectedItem } = props
+
+    const dispatch = useDispatch()
+
+    const sortSetting = useSelector(state => state.tableReducer.sortSetting)
 
     return <table>
-            <thead>
-                <tr>
-                    {columnName.map((column, index) => {
-                        const isSort = sortDirection && sortDirection.field === column;
-                        return <th key={index}
-                            className={`${isSort ? "sort" : "unsort"} ${isSort && sortDirection.descendingOrder ? "descending" : ""}`}
-                            onClick={() => { SortCallback(column) }}>
-                            {column}
-                        </th>
-                    })}
-                </tr>
-            </thead>
-                <tbody >
-                    {React.Children.map(children, child => {
-                        return React.cloneElement(child, { columnName: columnName,
-                             onClickHandler: RowItemCallback,
-                             selected:selectedItem })
-                    })}
-                </tbody>
-        </table>
+        <thead>
+            <tr>
+                {columnName.map((column, index) => {
+                    const isSort = sortSetting && sortSetting.field === column;
+                    return <th key={index}
+                        className={`${isSort ? "sort" : "unsort"} ${isSort && sortSetting.descendingOrder ? "descending" : ""}`}
+                        onClick={() => {
+                            dispatch(changeSortingSetting(column));
+                            dispatch(sortData())
+                        }}>
+                        {column}
+                    </th>
+                })}
+            </tr>
+        </thead>
+        <tbody >
+            {React.Children.map(children, child => {
+                return React.cloneElement(child, {
+                    columnName: columnName,
+                    onClickHandler: RowItemCallback,
+                    selected: selectedItem
+                })
+            })}
+        </tbody>
+    </table>
 }
