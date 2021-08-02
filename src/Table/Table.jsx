@@ -5,9 +5,9 @@ import { AdditionalInfo } from "../AdditionalInfo/AdditionalInfo"
 import { AddUser } from "../AddUser/AddUser"
 import { getSomeItems } from "../utils/Utils"
 import ReactPaginate from 'react-paginate';
-import "./style.css"
-import { connect, useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addUser, changePage, changeSelectedElement, renderData, searchElements } from '../reducer/actions';
+import "./style.css"
 
 
 const Table = (props) => {

@@ -2,23 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App/App';
-import reportWebVitals from './reportWebVitals';
 import Task1 from "../src/task1/task1"
-import { TestDnD } from "./task1/testDnD"
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import { AdditionalInfo } from './AdditionalInfo/AdditionalInfo';
 
 ReactDOM.render(
   <BrowserRouter>
-  <Provider store={store}>
-    {/* <Switch>
-      <Route path="/app" component={App} exact/>
-      <Route path="/app/:id/:name" component={AdditionalInfo}/>
-    </Switch> */}
-    <App/>
-  </Provider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </BrowserRouter>
   ,
   document.getElementById('root')

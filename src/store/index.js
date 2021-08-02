@@ -2,12 +2,14 @@ import { applyMiddleware, combineReducers } from "redux";
 import { createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
-import ducks from "../reducer";
-import {tableReducer} from "../reducer/tableReducer"
-
+import createSagaMiddleware from "redux-saga"
+import { tableReducer } from "../reducer/tableReducer"
+import { rootSaga } from "../sagas";
 const rootReducer = combineReducers({
-    ducks,tableReducer
+    tableReducer
 })
+const sagaMiddleware = createSagaMiddleware()
 
+export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, sagaMiddleware)))
 
-export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))
+sagaMiddleware.run(rootSaga);

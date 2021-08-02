@@ -2,6 +2,8 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { changeSortingSetting, sortData } from '../reducer/actions'
 import "./style.css"
+
+
 /** Grid props
     @prop {string} items Список отображаемых элементов таблицы
     @prop {[string]} ColumnsName Массив названий столбцов таблицы(в порядке отображения)

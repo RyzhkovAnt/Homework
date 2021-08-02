@@ -1,7 +1,5 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { getDataForTable, loading } from '../reducer';
-import { getData } from '../reducer/actions';
 
 
 const BIG_FROM_SERVER = "http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}";
@@ -13,10 +11,7 @@ const SMALL_FROM_FILE = "/data_small.json";
 const Menu = (props) => {
     const dispatch = useDispatch()
     const clickHandler = (source) => {
-        // dispatch(sho)
-        dispatch(getData(source))
-        // dispatch(getDataForTable(source))
-        // отправлять на страницу с таблицей
+        dispatch({type:"FETCH_DATA",payload:source})
     }
 
     return <div className="menu">Загрузить:

@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import "./style.css";
-import { Draggable } from 'react-beautiful-dnd';
 
 export const Row = (props) => {
     const { item, onClickHandler, columnName,selected } = props;

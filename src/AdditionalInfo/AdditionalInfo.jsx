@@ -1,7 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeSelectedElement, deleteElement } from '../reducer/actions'
-import { Route, useParams } from 'react-router-dom'
 import "./style.css"
 
 /*

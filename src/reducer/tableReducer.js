@@ -1,5 +1,4 @@
-import { hideLoader } from "./actions"
-import { CHANGED_DATA, DATA, HIDE_LOADER, PAGE, RENDER_DATA, SELECT_ELEMENT, SETTING_SORT, SHOW_LOADER, SORTING } from "./actionsType"
+import { CHANGED_DATA, DATA, HIDE_LOADER, PAGE, RENDER_DATA, SELECT_ELEMENT, SETTING_SORT, SHOW_LOADER } from "./actionsType"
 
 const initialState = {
 
