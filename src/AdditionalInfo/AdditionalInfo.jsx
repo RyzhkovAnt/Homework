@@ -15,7 +15,6 @@ et lacus magna dolor...
 Индекс: <b>22178</b>
  */
 export const AdditionalInfo = (props) => {
-    const { item, deleteHandler, closeHandler } = props
     const user = useSelector(state => state.tableReducer.selectedElement)
     const dispatch = useDispatch()
 

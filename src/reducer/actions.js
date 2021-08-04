@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FilterElements, getSomeItems, sortElement } from "../utils/Utils";
+import { changeItemPosition, FilterElements, getSomeItems, sortElement } from "../utils/Utils";
 import { CHANGED_DATA, DATA, HIDE_LOADER, PAGE, RENDER_DATA, SELECT_ELEMENT, SETTING_SORT, SHOW_LOADER } from "./actionsType";
 
 export function showLoader() {
@@ -106,6 +106,17 @@ export function deleteElement() {
     }
 }
 
+
+export function changeElementPosition(indexStart, indexEnd) {
+    return (dispatch, getState) => {
+
+        const page=getState().tableReducer.page;
+        dispatch(renderData(changeItemPosition(getState().tableReducer.renderData, indexStart, indexEnd)))
+        dispatch(changeData(changeItemPosition(getState().tableReducer.changedData,indexStart*50*page,indexEnd*50*page)))
+        dispatch(changeSortingSetting({ field: "none", descendingOrder: false }))
+
+    }
+}
 export function getData(source) {
     return dispatch => {
         dispatch(showLoader())

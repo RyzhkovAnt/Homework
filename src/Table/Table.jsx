@@ -1,19 +1,16 @@
 import React, { useState } from 'react'
-import { Row } from '../Grid/Row';
-import { Grid } from "../Grid/Grid"
-import { AdditionalInfo } from "../AdditionalInfo/AdditionalInfo"
-import { AddUser } from "../AddUser/AddUser"
-import { getSomeItems } from "../utils/Utils"
 import ReactPaginate from 'react-paginate';
 import { useSelector, useDispatch } from 'react-redux';
-import { addUser, changePage, changeSelectedElement, renderData, searchElements } from '../reducer/actions';
+import { SortableContainer, SortableElement } from "react-sortable-hoc"
+import { addUser, changeElementPosition, changePage, renderData, searchElements } from '../reducer/actions';
+import { getSomeItems } from "../utils/Utils"
+import { AddUser } from "../AddUser/AddUser"
+import { AdditionalInfo } from "../AdditionalInfo/AdditionalInfo"
+import { Grid } from "../Grid/Grid"
+import { Row } from '../Grid/Row';
 import "./style.css"
 
-
 const Table = (props) => {
-    const {
-        sortSetting,
-        sortElement } = props;
 
     const columnName = ["id", "firstName", "lastName", "email", "phone"]
     const [showAddUserForm, setShowAddUserForm] = useState(false);
@@ -25,11 +22,6 @@ const Table = (props) => {
     const dataForRender = useSelector(state => state.tableReducer.renderData);
     const selectedElement = useSelector(state => state.tableReducer.selectedElement);
     const data = useSelector(state => state.tableReducer.changedData);
-
-    const SortElements = (field) => {
-        const descendingOrder = sortSetting && sortSetting.field === field ? !sortSetting.descendingOrder : false;
-        sortElement(field, descendingOrder)
-    }
 
     const onPageClick = (e) => {
         dispatch(changePage(e.selected))
@@ -46,6 +38,16 @@ const Table = (props) => {
         setShowAddUserForm(false)
     }
 
+    const SortableItem = SortableElement(({ value, columns }) => <Row item={value} columnName={columns} />)
+    const SortableList = SortableContainer(({ items, columns }) => {
+        return (
+            <Grid columnName={columns} >
+                {items.map((item, index) => (
+                    <SortableItem key={index} index={index} value={item} columns={columns} />
+                ))}
+            </Grid>
+        )
+    })
     return (
         <div className="dataTable">
             <div className="addUser">
@@ -57,18 +59,12 @@ const Table = (props) => {
                 <button onClick={onSearchHandler}>Найти</button>
             </div>
             <div className="dataGrid">
-                <Grid
-                    columnName={columnName}
-                    selectedItem={selectedElement}
-                    sortDirection={sortSetting}
-                    SortCallback={SortElements}
-                    RowItemCallback={(el)=>dispatch(changeSelectedElement(el))}>
-                    {dataForRender && dataForRender.map((item, index) => {
-                        return (
-                            <Row key={index} item={item} />
-                        )
-                    })}
-                </Grid>
+                <SortableList
+                    items={dataForRender}
+                    columns={columnName}
+                    lockAxis="y" pressDelay={125}
+                    onSortEnd={({ newIndex, oldIndex }) =>
+                        dispatch(changeElementPosition(oldIndex, newIndex))} />
             </div>
 
             {Math.ceil(data.length / 50) > 1 &&
@@ -91,7 +87,6 @@ const Table = (props) => {
                 <div className="additionalInfo">
                     <AdditionalInfo />
                 </div>
-
             }
         </div>
     )

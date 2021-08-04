@@ -1,45 +1,69 @@
+.tableFixHead {
+   overflow: auto;
+   height: 500px;
+}
+
+.tableFixHead thead th {
+   position: sticky;
+   top: 0;
+   z-index: 1;
+}
+
+.tableFixHead,
+.tableFixHead td {
+   box-shadow: inset 1px -1px #000;
+}
+
+.tableFixHead th {
+   box-shadow: inset 1px 1px #000, 0 1px #000;
+}
+
+td {
+   box-shadow: inset 1px -1px #000;
+}
+
 table {
    border-collapse: collapse;
-   border: 1px solid grey;
-   cursor: default;
-   width:100%;
-   padding:15px;
-
-
+   width: 100%;
 }
-th, td {
-   width:20%;
-   border: 1px solid grey; 
-   padding: 4px 10px;
+
+th,
+td {
+   padding: 8px 16px;
 }
+
+th {
+   background: #eee;
+   cursor: pointer;
+}
+
 
 tr:hover td {
    background: #c8494962;
    color: black;
 }
 
-th {
-   position: relative;
-   cursor: pointer;
-}
-
 th:after {
    position: absolute;
-   
-   top: 5px;
-   right: 5px;
+
+   top: 9px;
+   right: 20px;
 
 }
-.select{
+
+.select {
    background-color: #6e8dfd;
-   color:#fff;
+   color: #fff;
 }
-.unsort:after{
+
+.unsort:after {
    content: url("../assets/minus.svg");
 }
+
 .sort::after {
    content: url("../assets/up-arrow.svg");
 }
-.descending::after{
+
+.descending::after {
    content: url("../assets/down-arrow.svg")
 }
