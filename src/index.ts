@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App/App';
+import {App} from './App/';
 import Task1 from "../src/task1/task1"
 import { Provider } from 'react-redux';
 import { store } from './store';

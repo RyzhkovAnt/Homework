@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import { useSelector, useDispatch } from 'react-redux';
 import { SortableContainer, SortableElement } from "react-sortable-hoc"
-import { addUser, changeElementPosition, changePage, renderData, searchElements } from '../reducer/actions';
-import { getSomeItems } from "../utils/Utils"
-import { AddUser } from "../AddUser/AddUser"
-import { AdditionalInfo } from "../AdditionalInfo/AdditionalInfo"
-import { Grid } from "../Grid/Grid"
-import { Row } from '../Grid/Row';
+import { addUser, changeElementPosition, changePage, renderData, searchElements } from '../../reducer/actions';
+import { getSomeItems } from "../../utils/Utils"
+import { AddUser } from "../AddUser"
+import { AdditionalInfo } from "../AdditionalInfo"
+import { Grid, Row } from "../Grid"
 import "./style.css"
 
 const Table = (props) => {

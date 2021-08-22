@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { changeSortingSetting, sortData } from '../reducer/actions'
+import { changeSortingSetting, sortData } from '../../reducer/actions'
 import "./style.css"
 
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import Table from '../Table/Table';
-import { Preloader } from "../PreLoader/Preloader"
+import {Table} from '../components/Table';
+import { Preloader } from "../components/Preloader"
 import { useSelector } from 'react-redux';
+import {Menu} from '../components/Menu';
 import './style.css';
-import Menu from '../Menu/Menu';
 
 const App = (props) => {
 
